@@ -1,2 +1,5 @@
 .idea/
 venv/
+**/*.tfstate*
+**/__pycache__/
+**/.terraform*
