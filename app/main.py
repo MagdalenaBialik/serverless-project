@@ -1,14 +1,14 @@
 import json
-import os
 import random as rand
 import time
 
 import boto3
+from settings import get_settings
 
-# db_table = boto3.table("dynamodb")
-os.environ["DYNAMODB_TABLE_NAME"] = "pets-app-statistics-table"
+settings = get_settings()
+
 db_table = boto3.resource(service_name="dynamodb", region_name="eu-west-1").Table(
-    os.getenv("DYNAMODB_TABLE_NAME")
+    settings.DYNAMODB_TABLE_NAME
 )
 
 
