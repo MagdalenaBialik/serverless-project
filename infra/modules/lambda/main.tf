@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "pets-app-function" {
   function_name = "${var.app_name}-lambda-add-pet"
   role          = var.lambda_role
-  filename      = "${path.module}/appka.zip"
+  filename      = "${path.module}/app.zip"
   handler       = "main.handler"
   runtime       = "python3.8"
 

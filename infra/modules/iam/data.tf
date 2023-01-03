@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "iam_policy_document" {
 data "aws_iam_policy_document" "dynamodb_policy_document" {
   statement {
     actions = [
+      "dynamodb:PutItem",
       "dynamodb:GetItem",
       "dynamodb:Query",
 
