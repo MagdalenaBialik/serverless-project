@@ -1,2 +1,1 @@
-app_name       = "pets-app"
-cron_every_day = "cron(0 8 ? * * *)"
+app_name = "pets-app"

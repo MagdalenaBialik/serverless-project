@@ -5,6 +5,3 @@ variable "app_name" {
 variable "file_hash" {
   type = string
 }
-variable "cron_every_day" {
-  type = string
-}
