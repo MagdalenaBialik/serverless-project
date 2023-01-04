@@ -9,3 +9,7 @@ variable "lambda_role" {
 variable "dynamodb_table_name" {
   type = string
 }
+
+variable "file_hash" {
+  type = string
+}

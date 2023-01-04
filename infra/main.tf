@@ -34,4 +34,5 @@ module "lambda" {
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
+  file_hash           = var.file_hash
 }
