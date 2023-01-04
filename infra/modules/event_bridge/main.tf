@@ -3,7 +3,7 @@ resource "aws_cloudwatch_event_rule" "lambda_event_rule" {
   schedule_expression = var.cron_expression
 }
 
-resource "aws_cloudwatch_event_target" "add_pet_lambda_target" {
+resource "aws_cloudwatch_event_target" "lambda_target" {
   arn  = var.lambda_function_arn
   rule = aws_cloudwatch_event_rule.lambda_event_rule.name
 }
