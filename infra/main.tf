@@ -36,3 +36,10 @@ module "lambda" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
 }
+
+module "event_bridge" {
+  source              = "./modules/event_bridge"
+  lambda_function_arn = module.lambda.lambda_function_arn
+  function_name       = module.lambda.lambda_function_name
+
+}
