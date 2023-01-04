@@ -36,7 +36,7 @@ jobs:
       - name: create zip package
         id: create-package
         env:
-          file_hash: ${{ hashFiles('api/**', 'requirements.txt') }}
+          file_hash: ${{ hashFiles('app/**', 'requirements.txt') }}
         run: |
           pip3 install -r requirements.txt --target dependencies
           cd ./dependencies && zip -r9 ../$file_hash .
