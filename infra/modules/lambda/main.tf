@@ -5,7 +5,7 @@ resource "aws_lambda_function" "pets-app-function" {
   s3_bucket = "pets-app-artifacts"
   s3_key    = "${var.file_hash}.zip"
 
-  handler = "main.handler"
+  handler = "app.main.handler"
   runtime = "python3.8"
 
   environment {
