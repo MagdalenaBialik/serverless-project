@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "add_pet_lambda_event_rule" {
-  name                = "add-pet-lambda-rule"
-  schedule_expression = "cron(0 8 ? * * *)"
+  name                = var.function_name
+  schedule_expression = var.cron_every_day
 }
 
 resource "aws_cloudwatch_event_target" "add_pet_lambda_target" {
@@ -8,7 +8,7 @@ resource "aws_cloudwatch_event_target" "add_pet_lambda_target" {
   rule = aws_cloudwatch_event_rule.add_pet_lambda_event_rule.name
 }
 
-resource "aws_lambda_permission" "allow_cloudwatch_to_add_pet_lambda" {
+resource "aws_lambda_permission" "allow_cloudwatch_invoke_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = var.function_name

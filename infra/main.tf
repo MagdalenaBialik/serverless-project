@@ -41,5 +41,6 @@ module "event_bridge" {
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda.lambda_function_arn
   function_name       = module.lambda.lambda_function_name
+  cron_every_day      = var.cron_every_day
 
 }

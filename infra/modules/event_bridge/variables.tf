@@ -5,3 +5,7 @@ variable "lambda_function_arn" {
 variable "function_name" {
   type = string
 }
+
+variable "cron_every_day" {
+  type = string
+}
