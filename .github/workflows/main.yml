@@ -1,0 +1,79 @@
+name: pets-app CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+
+jobs:
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: install pre-commit
+        run: pip3 install pre-commit
+      - name: run pre-commit
+        run: pre-commit run --all-files
+
+  build-artifacts:
+    needs: [ pre-commit ]
+    runs-on: ubuntu-latest
+    outputs:
+      file_hash1: ${{ steps.create-package.outputs.file_hash }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: create zip package
+        id: create-package
+        env:
+          file_hash: ${{ hashFiles('app/**', 'requirements.txt') }}
+        run: |
+          pip3 install -r requirements.txt --target dependencies
+          cd ./dependencies && zip -r9 ../$file_hash .
+          # add APP files to Zip file
+          cd .. && zip -g ./$file_hash -r ./app
+          echo "file_hash=$file_hash" >> $GITHUB_OUTPUT
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+      - name: Upload to S3
+        run: aws s3 cp $file_hash.zip s3://pets-app-artifacts/$file_hash.zip
+        env:
+          file_hash: ${{ hashFiles('app/**', 'requirements.txt') }}
+
+  CD:
+    runs-on: ubuntu-latest
+    needs: [ build-artifacts ]
+
+    defaults:
+      run:
+        working-directory: ./infra
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false -var-file="variable.tfvars" -var "file_hash=${{needs.build-artifacts.outputs.file_hash1}}"
