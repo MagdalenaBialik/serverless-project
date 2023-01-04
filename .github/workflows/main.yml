@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - master
-      - gha
+
 
 jobs:
 
@@ -58,7 +58,7 @@ jobs:
   CD:
     runs-on: ubuntu-latest
     needs: [ build-artifacts ]
-    #    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
     defaults:
       run:
         working-directory: ./infra
