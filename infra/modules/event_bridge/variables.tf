@@ -6,6 +6,6 @@ variable "function_name" {
   type = string
 }
 
-variable "cron_every_day" {
+variable "cron_expression" {
   type = string
 }

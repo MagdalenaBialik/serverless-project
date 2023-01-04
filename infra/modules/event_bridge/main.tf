@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_event_rule" "add_pet_lambda_event_rule" {
   name                = var.function_name
-  schedule_expression = var.cron_every_day
+  schedule_expression = var.cron_expression
 }
 
 resource "aws_cloudwatch_event_target" "add_pet_lambda_target" {
