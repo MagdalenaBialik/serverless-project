@@ -27,21 +27,43 @@ module "iam" {
   source              = "./modules/iam"
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
+  s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
 }
 
-module "lambda" {
+module "lambda_add_pet" {
   source              = "./modules/lambda"
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
+  suffix              = "add_pet"
+  s3_bucket_artifacts = var.s3_bucket_artifacts
+  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
 }
 
-module "event_bridge" {
+module "lambda_statistics" {
+  source              = "./modules/lambda"
+  app_name            = var.app_name
+  dynamodb_table_name = module.dynamodb.dynamodb_table_name
+  lambda_role         = module.iam.iam_role_arn
+  file_hash           = var.file_hash
+  suffix              = "statistics"
+  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
+  s3_bucket_artifacts = var.s3_bucket_artifacts
+}
+
+module "event_bridge_add_pet" {
   source              = "./modules/event_bridge"
-  lambda_function_arn = module.lambda.lambda_function_arn
-  function_name       = module.lambda.lambda_function_name
+  lambda_function_arn = module.lambda_add_pet.lambda_function_arn
+  function_name       = module.lambda_add_pet.lambda_function_name
   cron_expression     = "cron(0 8 ? * * *)"
+}
+
+module "event_bridge_weekly_statistics" {
+  source              = "./modules/event_bridge"
+  lambda_function_arn = module.lambda_statistics.lambda_function_arn
+  function_name       = module.lambda_statistics.lambda_function_name
+  cron_expression     = "cron(0 8 ? * 1 *)"
 }
 
 module "photo-s3bucket" {

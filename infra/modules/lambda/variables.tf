@@ -13,3 +13,16 @@ variable "dynamodb_table_name" {
 variable "file_hash" {
   type = string
 }
+
+variable "suffix" {
+  type = string
+}
+
+variable "s3_bucket_artifacts" {
+  type = string
+}
+
+variable "env_variables" {
+  type    = map(any)
+  default = {}
+}

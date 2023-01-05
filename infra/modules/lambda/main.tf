@@ -1,20 +1,21 @@
-resource "aws_lambda_function" "pets-app-function" {
-  function_name = "${var.app_name}-lambda-add-pet"
+resource "aws_lambda_function" "function" {
+  function_name = "${var.app_name}-${var.suffix}"
   role          = var.lambda_role
 
-  s3_bucket = "pets-app-artifacts"
+  s3_bucket = var.s3_bucket_artifacts
   s3_key    = "${var.file_hash}.zip"
 
-  handler = "app.main.handler"
+  handler = "app.${var.suffix}.handler"
   runtime = "python3.8"
 
   environment {
-    variables = {
-      DYNAMODB_TABLE_NAME = var.dynamodb_table_name
-    }
+    variables = merge({
+      dynamodb_table_name = var.dynamodb_table_name
+    }, var.env_variables)
+
   }
 }
 
 resource "aws_cloudwatch_log_group" "lambda_logs" {
-  name = "/aws/lambda/${aws_lambda_function.pets-app-function.function_name}"
+  name = "/aws/lambda/${aws_lambda_function.function.function_name}"
 }

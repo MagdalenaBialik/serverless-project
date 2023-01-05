@@ -40,3 +40,13 @@ data "aws_iam_policy_document" "function_logging_policy_document" {
     effect = "Allow"
   }
 }
+
+data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = ["arn:aws:s3:::${var.s3_bucket_name}"]
+  }
+}

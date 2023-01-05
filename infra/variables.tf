@@ -5,3 +5,7 @@ variable "app_name" {
 variable "file_hash" {
   type = string
 }
+
+variable "s3_bucket_artifacts" {
+  type = string
+}

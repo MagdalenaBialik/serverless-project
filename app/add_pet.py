@@ -9,7 +9,7 @@ from app.settings import get_settings
 settings = get_settings()
 
 db_table = boto3.resource(service_name="dynamodb", region_name="eu-west-1").Table(
-    settings.DYNAMODB_TABLE_NAME
+    settings.dynamodb_table_name
 )
 
 
@@ -20,8 +20,7 @@ def add_to_table(pet_of_the_day):
 
 
 def handler(event, context):
-    pets = ["Brutus", "Borys", "Majkus", "Milusia"]
-    pet_of_the_day = rand.choice(pets)
+    pet_of_the_day = rand.choice(settings.pets)
 
     add_to_table(pet_of_the_day)
 
