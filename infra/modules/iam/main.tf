@@ -14,11 +14,21 @@ resource "aws_iam_role_policy_attachment" "logging_policy_attachment" {
 }
 
 resource "aws_iam_policy" "dynamodb_policy" {
-  name   = "${var.app_name}-dynamodb_policy"
+  name   = "${var.app_name}-dynamodb-policy"
   policy = data.aws_iam_policy_document.dynamodb_policy_document.json
 }
 
 resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
   role       = aws_iam_role.pet-role.id
   policy_arn = aws_iam_policy.dynamodb_policy.arn
+}
+
+resource "aws_iam_policy" "s3_policy" {
+  name   = "${var.app_name}-s3-policy"
+  policy = data.aws_iam_policy_document.allow_access_to_s3_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
+  role       = aws_iam_role.pet-role.id
+  policy_arn = aws_iam_policy.s3_policy.arn
 }
