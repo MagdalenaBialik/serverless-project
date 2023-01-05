@@ -1,3 +1,4 @@
+import json
 import time
 
 import boto3
@@ -11,10 +12,6 @@ db_table = boto3.resource(service_name="dynamodb", region_name="eu-west-1").Tabl
     settings.dynamodb_table_name
 )
 s3 = boto3.client(service_name="s3", region_name="eu-west-1")
-
-
-def handler_statistics(event, context):
-    return statistics()
 
 
 def get_object_from_s3(pet_statistics_dict):
@@ -43,10 +40,14 @@ def statistics():
         pet_statistics_dict[pet] = response["Count"]
         response = get_object_from_s3(pet_statistics_dict)
 
-    return print(response)
+    return response
 
 
-statistics()
+def handler(event, context):
+    statistics()
+    return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
+
+
 #
 # def lambda_prepare_message(pet_statistics_dict):
 #     max_pet_statistics_dict = max(pet_statistics_dict, key=pet_statistics_dict.get)
