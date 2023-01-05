@@ -43,3 +43,8 @@ module "event_bridge" {
   function_name       = module.lambda.lambda_function_name
   cron_expression     = "cron(0 8 ? * * *)"
 }
+
+module "photo-s3bucket" {
+  source   = "./modules/s3"
+  app_name = var.app_name
+}
