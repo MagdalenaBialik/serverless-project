@@ -36,7 +36,7 @@ module "lambda_add_pet" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "add_pet"
-  s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
+  s3_bucket_artifacts = var.s3_bucket_artifacts
 }
 
 module "lambda_statistics" {
@@ -46,9 +46,8 @@ module "lambda_statistics" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "statistics"
-  s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
   env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
-
+  s3_bucket_artifacts = var.s3_bucket_artifacts
 }
 
 module "event_bridge" {

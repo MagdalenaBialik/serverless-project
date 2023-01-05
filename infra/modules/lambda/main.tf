@@ -2,7 +2,7 @@ resource "aws_lambda_function" "function" {
   function_name = "${var.app_name}-${var.suffix}"
   role          = var.lambda_role
 
-  s3_bucket = "pets-app-artifacts"
+  s3_bucket = var.s3_bucket_artifacts
   s3_key    = "${var.file_hash}.zip"
 
   handler = "app.${var.suffix}.handler"

@@ -13,3 +13,7 @@ variable "add_pet_function_suffix" {
 variable "statistic_function_suffix" {
   type = string
 }
+
+variable "s3_bucket_artifacts" {
+  type = string
+}
