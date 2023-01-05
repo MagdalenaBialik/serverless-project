@@ -29,18 +29,31 @@ module "iam" {
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
 }
 
-module "lambda" {
+module "lambda_add_pet" {
   source              = "./modules/lambda"
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
+  suffix              = var.add_pet_function_suffix
+  s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
+}
+
+module "lambda_statistics" {
+  source              = "./modules/lambda"
+  app_name            = var.app_name
+  dynamodb_table_name = module.dynamodb.dynamodb_table_name
+  lambda_role         = module.iam.iam_role_arn
+  file_hash           = var.file_hash
+  suffix              = var.statistic_function_suffix
+  s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
+
 }
 
 module "event_bridge" {
   source              = "./modules/event_bridge"
-  lambda_function_arn = module.lambda.lambda_function_arn
-  function_name       = module.lambda.lambda_function_name
+  lambda_function_arn = module.lambda_add_pet.lambda_function_arn
+  function_name       = module.lambda_add_pet.lambda_function_name
   cron_expression     = "cron(0 8 ? * * *)"
 }
 

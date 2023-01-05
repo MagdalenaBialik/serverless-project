@@ -13,3 +13,11 @@ variable "dynamodb_table_name" {
 variable "file_hash" {
   type = string
 }
+
+variable "suffix" {
+  type = string
+}
+
+variable "s3_bucket_name" {
+  type = string
+}
