@@ -21,3 +21,8 @@ variable "suffix" {
 variable "s3_bucket_name" {
   type = string
 }
+
+variable "env_variables" {
+  type    = map(any)
+  default = {}
+}

@@ -9,10 +9,10 @@ resource "aws_lambda_function" "function" {
   runtime = "python3.8"
 
   environment {
-    variables = {
+    variables = merge({
       dynamodb_table_name = var.dynamodb_table_name
-      s3_bucket_name      = var.s3_bucket_name
-    }
+    }, var.env_variables)
+
   }
 }
 

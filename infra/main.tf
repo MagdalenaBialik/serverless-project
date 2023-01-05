@@ -35,7 +35,7 @@ module "lambda_add_pet" {
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
-  suffix              = var.add_pet_function_suffix
+  suffix              = "add_pet"
   s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
 }
 
@@ -45,8 +45,9 @@ module "lambda_statistics" {
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
-  suffix              = var.statistic_function_suffix
+  suffix              = "statistics"
   s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
+  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
 
 }
 
