@@ -38,6 +38,7 @@ module "lambda_add_pet" {
   file_hash           = var.file_hash
   suffix              = "add_pet"
   s3_bucket_artifacts = var.s3_bucket_artifacts
+  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
 }
 
 module "lambda_statistics" {
