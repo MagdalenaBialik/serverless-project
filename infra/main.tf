@@ -52,11 +52,18 @@ module "lambda_statistics" {
   s3_bucket_artifacts = var.s3_bucket_artifacts
 }
 
-module "event_bridge" {
+module "event_bridge_add_pet" {
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda_add_pet.lambda_function_arn
   function_name       = module.lambda_add_pet.lambda_function_name
   cron_expression     = "cron(0 8 ? * * *)"
+}
+
+module "event_bridge_weekly_statistics" {
+  source              = "./modules/event_bridge"
+  lambda_function_arn = module.lambda_statistics.lambda_function_arn
+  function_name       = module.lambda_statistics.lambda_function_name
+  cron_expression     = "cron(0 8 ? * 1 *)"
 }
 
 module "photo-s3bucket" {
