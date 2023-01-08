@@ -40,12 +40,12 @@ def lambda_prepare_message(pet_statistics_dict):
     return message
 
 
-def lambda_sent_pet(message):
+def ses_send(title, message):
     ses_response = ses_client.send_email(
         Source="magdalena.bialik@gmail.com",
         Destination={"ToAddresses": ["magdalena.bialik@gmail.com"]},
         Message={
-            "Subject": {"Data": "Pet of the day statistics"},
+            "Subject": {"Data": title},
             "Body": {"Text": {"Data": message}},
         },
     )
@@ -64,12 +64,9 @@ def statistics():
         pet_statistics_dict[pet] = response["Count"]
 
     message_to_send = lambda_prepare_message(pet_statistics_dict)
-    lambda_sent_pet(message_to_send)
+    ses_send("Pet of the day statistics", message_to_send)
 
 
 def handler(event, context):
     statistics()
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
-
-
-statistics()
