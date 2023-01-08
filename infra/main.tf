@@ -73,6 +73,5 @@ module "photo-s3bucket" {
 }
 
 module "ses" {
-  source                  = "./modules/ses"
-  statistics_function_arn = module.lambda_statistics.lambda_function_arn
+  source = "./modules/ses"
 }
