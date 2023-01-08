@@ -14,10 +14,10 @@ resource "aws_ses_receipt_rule" "store" {
   "magdalena.bialik@gmail.com"]
   enabled      = true
   scan_enabled = true
-
-  lambda_action {
-    function_arn = var.statistics_function_arn
-    position     = 0
-  }
+  //
+  //  lambda_action {
+  //    function_arn = var.statistics_function_arn
+  //    position     = 0
+  //  }
 
 }
