@@ -28,6 +28,7 @@ module "iam" {
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
+  ses_identity        = module.ses.ses_identity_arn
 }
 
 module "lambda_add_pet" {
@@ -69,4 +70,8 @@ module "event_bridge_weekly_statistics" {
 module "photo-s3bucket" {
   source   = "./modules/s3"
   app_name = var.app_name
+}
+
+module "ses" {
+  source = "./modules/ses"
 }

@@ -12,6 +12,7 @@ db_table = boto3.resource(service_name="dynamodb", region_name="eu-west-1").Tabl
     settings.dynamodb_table_name
 )
 s3 = boto3.client(service_name="s3", region_name="eu-west-1")
+ses_client = boto3.client(service_name="ses", region_name="eu-west-1")
 
 
 def get_object_from_s3(pet_statistics_dict):
@@ -28,6 +29,29 @@ def get_object_from_s3(pet_statistics_dict):
     return url
 
 
+def prepare_statistics_message(pet_statistics_dict):
+
+    message = "Pet Statistics: \n"
+    for pets_name, result in pet_statistics_dict.items():
+        message += f"{pets_name}:{result}\n"
+
+    message += get_object_from_s3(pet_statistics_dict)
+
+    return message
+
+
+def ses_send(title, message):
+    ses_response = ses_client.send_email(
+        Source="magdalena.bialik@gmail.com",
+        Destination={"ToAddresses": ["magdalena.bialik@gmail.com"]},
+        Message={
+            "Subject": {"Data": title},
+            "Body": {"Text": {"Data": message}},
+        },
+    )
+    return ses_response
+
+
 def statistics():
     pet_statistics_dict = {}
     for pet in settings.pets:
@@ -38,44 +62,11 @@ def statistics():
             ),
         )
         pet_statistics_dict[pet] = response["Count"]
-        response = get_object_from_s3(pet_statistics_dict)
 
-    return response
+    message_to_send = prepare_statistics_message(pet_statistics_dict)
+    ses_send("Pet of the day statistics", message_to_send)
 
 
 def handler(event, context):
     statistics()
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
-
-
-#
-# def lambda_prepare_message(pet_statistics_dict):
-#     max_pet_statistics_dict = max(pet_statistics_dict, key=pet_statistics_dict.get)
-#
-#     message = "Pet Statistics: \n"
-#     for nazwa_zwierzatka, wynik in pet_statistics_dict.items():
-#         message += f"{nazwa_zwierzatka}:{wynik}\n"
-#
-#     message += get_object_from_s3(pet_statistics_dict)
-#     return message
-#
-#
-# def lambda_sent_pet(message):
-#     ses_response = ses_client.send_email(
-#         Source='alek.fidelus@gmail.com',
-#         Destination={
-#             'ToAddresses': ['magdalena.bialik@gmail.com', 'alek.fidelus@gmail.com']
-#         },
-#         Message={
-#             'Subject': {
-#                 'Data': 'Statystyki zwierzatek dnia'
-#             },
-#
-#             'Body': {
-#                 'Text': {
-#                     'Data': message
-#                 }
-#             }
-#         }
-#     )
-#     return ses_response
