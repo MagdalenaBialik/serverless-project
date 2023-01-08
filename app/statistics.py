@@ -29,7 +29,7 @@ def get_object_from_s3(pet_statistics_dict):
     return url
 
 
-def lambda_prepare_message(pet_statistics_dict):
+def prepare_statistics_message(pet_statistics_dict):
 
     message = "Pet Statistics: \n"
     for pets_name, result in pet_statistics_dict.items():
@@ -63,7 +63,7 @@ def statistics():
         )
         pet_statistics_dict[pet] = response["Count"]
 
-    message_to_send = lambda_prepare_message(pet_statistics_dict)
+    message_to_send = prepare_statistics_message(pet_statistics_dict)
     ses_send("Pet of the day statistics", message_to_send)
 
 
