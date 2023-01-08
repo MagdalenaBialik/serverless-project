@@ -32,3 +32,13 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attachment" {
   role       = aws_iam_role.pet-role.id
   policy_arn = aws_iam_policy.s3_policy.arn
 }
+
+resource "aws_iam_policy" "ses_policy" {
+  name   = "${var.app_name}-ses-policy"
+  policy = data.aws_iam_policy_document.ses_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "ses_policy_attachment" {
+  role       = aws_iam_role.pet-role.id
+  policy_arn = aws_iam_policy.ses_policy.arn
+}

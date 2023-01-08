@@ -70,3 +70,8 @@ module "photo-s3bucket" {
   source   = "./modules/s3"
   app_name = var.app_name
 }
+
+module "ses" {
+  source                  = "./modules/ses"
+  statistics_function_arn = module.lambda_statistics.lambda_function_arn
+}

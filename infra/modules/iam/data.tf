@@ -50,3 +50,14 @@ data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
     resources = ["arn:aws:s3:::${var.s3_bucket_name}"]
   }
 }
+
+data "aws_iam_policy_document" "ses_policy_document" {
+  statement {
+    actions = [
+      "ses:SendEmail",
+    ]
+    resources = [
+      "*"
+    ]
+  }
+}
