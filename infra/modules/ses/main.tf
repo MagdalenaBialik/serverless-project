@@ -1,9 +1,9 @@
-resource "aws_ses_email_identity" "from" {
+resource "aws_ses_email_identity" "ses_identity" {
   email = "magdalena.bialik@gmail.com"
 }
 
-resource "aws_ses_domain_mail_from" "example" {
-  domain           = aws_ses_email_identity.from.email
+resource "aws_ses_domain_mail_from" "ses_from" {
+  domain           = aws_ses_email_identity.ses_identity.email
   mail_from_domain = "magdalena.bialik@gmail.com"
 }
 

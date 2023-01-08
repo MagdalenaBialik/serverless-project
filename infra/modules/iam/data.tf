@@ -55,9 +55,9 @@ data "aws_iam_policy_document" "ses_policy_document" {
   statement {
     actions = [
       "ses:SendEmail",
+      "SES:SendRawEmail",
     ]
-    resources = [
-      "*"
-    ]
+    resources = [var.ses_identity]
+
   }
 }
