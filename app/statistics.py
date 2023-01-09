@@ -1,5 +1,6 @@
 import json
 import time
+from typing import Optional
 
 import boto3
 from boto3.dynamodb.conditions import Key
@@ -52,21 +53,36 @@ def ses_send(title, message):
     return ses_response
 
 
+def get_key_condition_expression(pet: str, days: Optional[int]):
+    if days is None:
+        return Key("PK").eq(pet)
+    else:
+        return Key("PK").eq(pet) & Key("SK").gt(
+            int(time.time() - (days * 24 * 60 * 60))
+        )
+
+
 def statistics():
     pet_statistics_dict = {}
     for pet in settings.pets:
         response = db_table.query(
             Select="COUNT",
-            KeyConditionExpression=(
-                Key("PK").eq(pet) & Key("SK").gt(int(time.time() - (7 * 24 * 60 * 60)))
+            KeyConditionExpression=get_key_condition_expression(
+                pet=pet, days=settings.days
             ),
         )
+
         pet_statistics_dict[pet] = response["Count"]
 
     message_to_send = prepare_statistics_message(pet_statistics_dict)
-    ses_send("Pet of the day statistics", message_to_send)
+    ses_send(settings.email_title, message_to_send)
 
 
 def handler(event, context):
     statistics()
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
+
+
+# print(get_key_condition_expression("Borys", 7))
+
+statistics()
