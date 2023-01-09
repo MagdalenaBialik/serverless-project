@@ -56,6 +56,7 @@ module "lambda_dynamodb_stream" {
   s3_bucket_artifacts = var.s3_bucket_artifacts
   env_variables = {
     s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+    email_title = "Pet of the day",
   }
 }
 
