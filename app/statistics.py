@@ -5,9 +5,16 @@ from typing import Optional
 import boto3
 from boto3.dynamodb.conditions import Key
 
-from app.settings import get_settings
+from app.base import SharedSettings
 
-settings = get_settings()
+
+class StatisticsSettings(SharedSettings):
+    s3_bucket_name: str
+    days: Optional[int]
+    email_title: str
+
+
+settings = StatisticsSettings()
 
 db_table = boto3.resource(service_name="dynamodb", region_name="eu-west-1").Table(
     settings.dynamodb_table_name
@@ -31,7 +38,6 @@ def get_object_from_s3(pet_statistics_dict):
 
 
 def prepare_statistics_message(pet_statistics_dict):
-
     message = "Pet Statistics: \n"
     for pets_name, result in pet_statistics_dict.items():
         message += f"{pets_name}:{result}\n"
@@ -78,3 +84,6 @@ def statistics():
 def handler(event, context):
     statistics()
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
+
+
+statistics()

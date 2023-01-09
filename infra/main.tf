@@ -42,7 +42,6 @@ module "lambda_add_pet" {
   s3_bucket_artifacts = var.s3_bucket_artifacts
   env_variables = {
     s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
-    email_title = "Pet of the day"
   }
 }
 
@@ -62,7 +61,7 @@ module "lambda_statistics_weekly" {
   s3_bucket_artifacts = var.s3_bucket_artifacts
 }
 
-module "lambda_statistics_monthly" {
+module "lambda_statistics_overall" {
   source              = "./modules/lambda"
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
@@ -93,8 +92,8 @@ module "event_bridge_weekly_statistics" {
 
 module "event_bridge_monthly_statistics" {
   source              = "./modules/event_bridge"
-  lambda_function_arn = module.lambda_statistics_monthly.lambda_function_arn
-  function_name       = module.lambda_statistics_monthly.lambda_function_name
+  lambda_function_arn = module.lambda_statistics_overall.lambda_function_arn
+  function_name       = module.lambda_statistics_overall.lambda_function_name
   cron_expression     = "cron(0 8 1 * ? *)"
 }
 
