@@ -4,6 +4,7 @@ resource "aws_dynamodb_table" "dynamodb_table" {
   write_capacity = 5
   hash_key       = "PK"
   range_key      = "SK"
+  stream_enabled = true
 
   attribute {
     name = "PK"
