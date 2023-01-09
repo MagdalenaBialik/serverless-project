@@ -38,6 +38,7 @@ module "lambda_add_pet" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "add_pet"
+  function_suffix     = "add_pet"
   s3_bucket_artifacts = var.s3_bucket_artifacts
   env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
 }
@@ -49,6 +50,7 @@ module "lambda_statistics_weekly" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "statistics"
+  function_suffix     = "weekly_statistics"
   env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name, days = 7, email_title = "Pet of the days weekly statistics" }
   s3_bucket_artifacts = var.s3_bucket_artifacts
 }
@@ -60,6 +62,7 @@ module "lambda_statistics_monthly" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "statistics"
+  function_suffix     = "monthly_statistics"
   env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name, days = 30, email_title = "Pet of the days monthly statistics" }
   s3_bucket_artifacts = var.s3_bucket_artifacts
 }

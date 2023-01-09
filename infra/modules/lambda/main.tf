@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "function" {
-  function_name = "${var.app_name}-${var.suffix}"
+  function_name = "${var.app_name}-${var.function_suffix}"
   role          = var.lambda_role
 
   s3_bucket = var.s3_bucket_artifacts

@@ -18,6 +18,10 @@ variable "suffix" {
   type = string
 }
 
+variable "function_suffix" {
+  type = string
+}
+
 variable "s3_bucket_artifacts" {
   type = string
 }
