@@ -68,7 +68,7 @@ module "lambda_statistics_overall" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "statistics"
-  function_suffix     = "monthly_statistics"
+  function_suffix     = "overall_statistics"
   env_variables = {
     s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
     email_title = "Pet of the days overall statistics"
