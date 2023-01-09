@@ -40,7 +40,7 @@ module "lambda_add_pet" {
   suffix              = "add_pet"
   function_suffix     = "add_pet"
   s3_bucket_artifacts = var.s3_bucket_artifacts
-  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
+  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name, email_title = "Pet of the day" }
 }
 
 module "lambda_statistics_weekly" {

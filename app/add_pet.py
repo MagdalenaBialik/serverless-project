@@ -25,6 +25,6 @@ def handler(event, context):
     pet_of_the_day = rand.choice(settings.pets)
 
     add_to_table(pet_of_the_day)
-    ses_send("Pet of the day", pet_of_the_day)
+    ses_send(settings.email_title, pet_of_the_day)
 
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
