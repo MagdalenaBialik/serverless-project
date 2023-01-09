@@ -40,7 +40,10 @@ module "lambda_add_pet" {
   suffix              = "add_pet"
   function_suffix     = "add_pet"
   s3_bucket_artifacts = var.s3_bucket_artifacts
-  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name, email_title = "Pet of the day" }
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+    email_title = "Pet of the day"
+  }
 }
 
 module "lambda_statistics_weekly" {
@@ -51,7 +54,11 @@ module "lambda_statistics_weekly" {
   file_hash           = var.file_hash
   suffix              = "statistics"
   function_suffix     = "weekly_statistics"
-  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name, days = 7, email_title = "Pet of the days weekly statistics" }
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+    days        = 7,
+    email_title = "Pet of the days weekly statistics"
+  }
   s3_bucket_artifacts = var.s3_bucket_artifacts
 }
 
@@ -63,7 +70,10 @@ module "lambda_statistics_monthly" {
   file_hash           = var.file_hash
   suffix              = "statistics"
   function_suffix     = "monthly_statistics"
-  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name, days = 30, email_title = "Pet of the days monthly statistics" }
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+    email_title = "Pet of the days overall statistics"
+  }
   s3_bucket_artifacts = var.s3_bucket_artifacts
 }
 

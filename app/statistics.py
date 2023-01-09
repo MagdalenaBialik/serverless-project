@@ -56,10 +56,7 @@ def ses_send(title, message):
 def get_key_condition_expression(pet: str, days: Optional[int]):
     if days is None:
         return Key("PK").eq(pet)
-    else:
-        return Key("PK").eq(pet) & Key("SK").gt(
-            int(time.time() - (days * 24 * 60 * 60))
-        )
+    return Key("PK").eq(pet) & Key("SK").gt(int(time.time() - (days * 24 * 60 * 60)))
 
 
 def statistics():
