@@ -18,6 +18,4 @@ Weekly lambda calculates statistics from last week and weekly sends an email wit
 This project is built using AWS Serverless Services according the schema shown below. Infrastucture was built using Terraform.
 
 
-
-![Untitled Diagram drawio](https://user-images.githubusercontent.com/64687726/211026939-bdf5a6c5-6ad1-42e0-9e5c-2ea3df26dd5b.png)
-
+![PETSAPP drawio](https://user-images.githubusercontent.com/64687726/211238262-fb820f8a-5d90-459d-9ac2-0be9f1a69b6c.png)
