@@ -45,6 +45,20 @@ module "lambda_add_pet" {
   }
 }
 
+module "lambda_dynamodb_stream" {
+  source              = "./modules/lambda"
+  app_name            = var.app_name
+  dynamodb_table_name = module.dynamodb.dynamodb_table_name
+  lambda_role         = module.iam.iam_role_arn
+  file_hash           = var.file_hash
+  suffix              = "dynamodb_stream"
+  function_suffix     = "dynamodb_stream"
+  s3_bucket_artifacts = var.s3_bucket_artifacts
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+  }
+}
+
 module "lambda_statistics_weekly" {
   source              = "./modules/lambda"
   app_name            = var.app_name
