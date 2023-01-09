@@ -81,8 +81,3 @@ def statistics():
 def handler(event, context):
     statistics()
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
-
-
-# print(get_key_condition_expression("Borys", 7))
-
-statistics()
