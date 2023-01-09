@@ -46,7 +46,7 @@ module "lambda_add_pet" {
 }
 
 resource "aws_lambda_event_source_mapping" "this" {
-  event_source_arn  = module.dynamodb.dynamodb_table_arn
+  event_source_arn  = module.dynamodb.dynamodb_table_stream_arn
   function_name     = module.lambda_dynamodb_stream.lambda_function_arn
   starting_position = "LATEST"
 }
