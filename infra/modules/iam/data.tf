@@ -47,7 +47,7 @@ data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
       "s3:GetObject",
     ]
 
-    resources = ["arn:aws:s3:::${var.s3_bucket_name}"]
+    resources = ["arn:aws:s3:::${var.s3_bucket_name}/*"]
   }
 }
 
