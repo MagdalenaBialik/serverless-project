@@ -38,18 +38,41 @@ module "lambda_add_pet" {
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "add_pet"
+  function_suffix     = "add_pet"
   s3_bucket_artifacts = var.s3_bucket_artifacts
-  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+  }
 }
 
-module "lambda_statistics" {
+module "lambda_statistics_weekly" {
   source              = "./modules/lambda"
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
   suffix              = "statistics"
-  env_variables       = { s3_bucket_name : module.photo-s3bucket.s3_bucket_name }
+  function_suffix     = "weekly_statistics"
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+    days        = 7,
+    email_title = "Pet of the days weekly statistics"
+  }
+  s3_bucket_artifacts = var.s3_bucket_artifacts
+}
+
+module "lambda_statistics_overall" {
+  source              = "./modules/lambda"
+  app_name            = var.app_name
+  dynamodb_table_name = module.dynamodb.dynamodb_table_name
+  lambda_role         = module.iam.iam_role_arn
+  file_hash           = var.file_hash
+  suffix              = "statistics"
+  function_suffix     = "overall_statistics"
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+    email_title = "Pet of the days overall statistics"
+  }
   s3_bucket_artifacts = var.s3_bucket_artifacts
 }
 
@@ -62,9 +85,16 @@ module "event_bridge_add_pet" {
 
 module "event_bridge_weekly_statistics" {
   source              = "./modules/event_bridge"
-  lambda_function_arn = module.lambda_statistics.lambda_function_arn
-  function_name       = module.lambda_statistics.lambda_function_name
+  lambda_function_arn = module.lambda_statistics_weekly.lambda_function_arn
+  function_name       = module.lambda_statistics_weekly.lambda_function_name
   cron_expression     = "cron(0 8 ? * 1 *)"
+}
+
+module "event_bridge_monthly_statistics" {
+  source              = "./modules/event_bridge"
+  lambda_function_arn = module.lambda_statistics_overall.lambda_function_arn
+  function_name       = module.lambda_statistics_overall.lambda_function_name
+  cron_expression     = "cron(0 8 1 * ? *)"
 }
 
 module "photo-s3bucket" {

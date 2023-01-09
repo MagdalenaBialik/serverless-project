@@ -1,6 +1,6 @@
 ## Info
 ### Project
-This AWS project is an serverless application that runs automatically using EventBridge events. 
+This AWS project is an serverless application that runs automatically using EventBridge events.
 ### Daily flow:
 Everyday a lambda function is triggered and chooses a random pet's name from a given list. The pets name and a timestamp are added to a DynamoDB Table. Using DynamoDB Streams another lambda is triggered and sends an email to an email list using AWS Simple Email Service (SES).
 ### Statistics
