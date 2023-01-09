@@ -81,6 +81,3 @@ def statistics():
 def handler(event, context):
     statistics()
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
-
-
-statistics()
