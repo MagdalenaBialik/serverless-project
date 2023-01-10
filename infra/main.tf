@@ -45,7 +45,6 @@ module "lambda_add_pet" {
   }
 }
 
-
 module "lambda_dynamodb_stream" {
   source              = "./modules/lambda"
   app_name            = var.app_name
