@@ -45,6 +45,29 @@ module "lambda_add_pet" {
   }
 }
 
+
+module "lambda_dynamodb_stream" {
+  source              = "./modules/lambda"
+  app_name            = var.app_name
+  dynamodb_table_name = module.dynamodb.dynamodb_table_name
+  lambda_role         = module.iam.iam_role_arn
+  file_hash           = var.file_hash
+  suffix              = "dynamodb_stream"
+  function_suffix     = "dynamodb_stream"
+  s3_bucket_artifacts = var.s3_bucket_artifacts
+  env_variables = {
+    s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
+    email_title = "Pet of the day",
+  }
+}
+
+resource "aws_lambda_event_source_mapping" "this" {
+  event_source_arn  = module.dynamodb.dynamodb_table_stream_arn
+  function_name     = module.lambda_dynamodb_stream.lambda_function_arn
+  starting_position = "LATEST"
+}
+
+
 module "lambda_statistics_weekly" {
   source              = "./modules/lambda"
   app_name            = var.app_name
