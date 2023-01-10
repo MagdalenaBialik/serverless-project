@@ -14,7 +14,7 @@ variable "file_hash" {
   type = string
 }
 
-variable "suffix" {
+variable "handler" {
   type = string
 }
 

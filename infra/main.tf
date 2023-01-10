@@ -37,7 +37,7 @@ module "lambda_add_pet" {
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
-  suffix              = "add_pet"
+  handler             = "app.handlers.add_pet.handler"
   function_suffix     = "add_pet"
   s3_bucket_artifacts = var.s3_bucket_artifacts
   env_variables = {
@@ -52,7 +52,7 @@ module "lambda_dynamodb_stream" {
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
-  suffix              = "dynamodb_stream"
+  handler             = "app.dynamodb_stream.handler"
   function_suffix     = "dynamodb_stream"
   s3_bucket_artifacts = var.s3_bucket_artifacts
   env_variables = {
@@ -74,7 +74,7 @@ module "lambda_statistics_weekly" {
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
-  suffix              = "statistics"
+  handler             = "app.statistics.handler"
   function_suffix     = "weekly_statistics"
   env_variables = {
     s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
@@ -90,7 +90,7 @@ module "lambda_statistics_overall" {
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   lambda_role         = module.iam.iam_role_arn
   file_hash           = var.file_hash
-  suffix              = "statistics"
+  handler             = "app.statistics.handler"
   function_suffix     = "overall_statistics"
   env_variables = {
     s3_bucket_name : module.photo-s3bucket.s3_bucket_name,
