@@ -39,10 +39,10 @@ jobs:
           file_hash: ${{ hashFiles('app/**', 'requirements.txt', 'handlers/**') }}
         run: |
           pip3 install -r requirements.txt --target dependencies
+          cp -r app dependencies/
+          cp -r handlers dependencies/
           cd ./dependencies && zip -r9 ../$file_hash .
-          # add APP files to Zip file
-          cd .. && zip -g ./$file_hash -r ./app
-          zip -ur ${file_hash}.zip handlers
+
           echo "file_hash=$file_hash" >> $GITHUB_OUTPUT
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
