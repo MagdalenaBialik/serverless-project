@@ -42,8 +42,7 @@ def get_object_from_s3(pet_statistics_dict):
 
 def prepare_statistics_message(pet_statistics: List[PetStatistics]):
     message = "Pet Statistics: \n"
-    for index in range(0, len(pet_statistics)):
-        item = pet_statistics[index]
+    for item in pet_statistics:
         message += f"{item.pet_name}:{item.count}\n"
 
     # message += get_object_from_s3(pet_statistics_dict)
