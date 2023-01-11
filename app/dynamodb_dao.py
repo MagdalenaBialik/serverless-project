@@ -9,7 +9,7 @@ class DynamoDBDao:
         self.settings = settings
         self.dynamodb_table = dynamodb_table
 
-    def add_pet(self, pet_name):
+    def add_pet(self, pet_name: str):
         self.dynamodb_table.put_item(
             Item={"PK": pet_name, "SK": int(time.time())},
         )
