@@ -1,4 +1,5 @@
 import json
+import operator
 from typing import List, Optional
 
 import boto3
@@ -26,10 +27,10 @@ s3 = boto3.client(service_name="s3", region_name="eu-west-1")
 ses_client = boto3.client(service_name="ses", region_name="eu-west-1")
 
 
-def get_object_from_s3(pet_statistics_dict):
-    max_pet_statistics_dict = max(pet_statistics_dict, key=pet_statistics_dict.get)
+def get_object_from_s3(pet_statistics):
+    max_pet_statistics = max(pet_statistics, key=operator.attrgetter("count"))
 
-    object_key = f"{max_pet_statistics_dict}.jpg"
+    object_key = f"{max_pet_statistics.pet_name}.jpg"
 
     url = s3.generate_presigned_url(
         "get_object",
@@ -45,7 +46,7 @@ def prepare_statistics_message(pet_statistics: List[PetStatistics]):
     for item in pet_statistics:
         message += f"{item.pet_name}:{item.count}\n"
 
-    # message += get_object_from_s3(pet_statistics_dict)
+    message += get_object_from_s3(pet_statistics)
 
     return message
 
