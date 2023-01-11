@@ -20,7 +20,7 @@ def handler(event, context):
     statistics_object = Statistic(db_table, s3, ses_client, settings)
 
     def statistics():
-        pet_events = dao.get_all_pet_event(days=StatisticsSettings.days)
+        pet_events = dao.get_all_pet_event(days=settings.days)
         message_to_send = statistics_object.prepare_statistics_message(pet_events)
         statistics_object.ses_send(settings.email_title, message_to_send)
         return message_to_send
