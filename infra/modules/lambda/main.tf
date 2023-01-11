@@ -5,7 +5,7 @@ resource "aws_lambda_function" "function" {
   s3_bucket = var.s3_bucket_artifacts
   s3_key    = "${var.file_hash}.zip"
 
-  handler = "app.${var.suffix}.handler"
+  handler = var.handler_name
   runtime = "python3.8"
 
   environment {
