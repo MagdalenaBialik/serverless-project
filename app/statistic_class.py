@@ -1,6 +1,8 @@
 import operator
 from typing import List, Optional
 
+import boto3
+
 from app.base import SharedSettings
 from app.dynamodb_dao import DynamoDBDao
 from app.models import PetStatistics
@@ -15,17 +17,20 @@ class StatisticsSettings(SharedSettings):
 class Statistic:
     def __init__(
         self,
-        dynamodb_table,
         s3_client,
         ses_service,
         settings: StatisticsSettings,
-        dynamodb_dao: DynamoDBDao,
     ):
-        self.dynamodb_table = dynamodb_table
         self.s3_client = s3_client
         self.ses_service = ses_service
         self.settings = settings
-        self.dynamodb_dao = dynamodb_dao
+
+        self.dynamodb_table = boto3.resource(
+            service_name="dynamodb", region_name="eu-west-1"
+        ).Table(self.settings.dynamodb_table_name)
+        self.dynamodb_dao = DynamoDBDao(
+            dynamodb_table=self.dynamodb_table, settings=settings
+        )
 
     def get_presigned_url(self, pet_statistics: List[PetStatistics]):
         max_pet_statistics = max(pet_statistics, key=operator.attrgetter("count"))
