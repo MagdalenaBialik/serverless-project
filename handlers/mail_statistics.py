@@ -6,7 +6,7 @@ from app.dynamodb_dao import DynamoDBDao
 from app.statistic_class import Statistic, StatisticsSettings
 
 settings = StatisticsSettings()
-statistics_object = Statistic()
+
 
 db_table = boto3.resource(service_name="dynamodb", region_name="eu-west-1").Table(
     settings.dynamodb_table_name
@@ -15,6 +15,8 @@ dao = DynamoDBDao(db_table, settings)
 
 s3 = boto3.client(service_name="s3", region_name="eu-west-1")
 ses_client = boto3.client(service_name="ses", region_name="eu-west-1")
+
+statistics_object = Statistic(db_table, s3, ses_client, settings)
 
 
 def statistics():
