@@ -49,10 +49,14 @@ class Statistic:
 
         return message
 
-    def ses_send(self, title: str):
+    def send_statistics(self, title: str):
         pet_events = self.dynamodb_dao.get_all_pet_event(days=self.settings.days)
         message = self.prepare_statistics_message(pet_events)
 
+        self.ses_send(title, message)
+        return message
+
+    def ses_send(self, title: str, message):
         ses_response = self.ses_service.send_email(
             Source="magdalena.bialik@gmail.com",
             Destination={"ToAddresses": ["magdalena.bialik@gmail.com"]},

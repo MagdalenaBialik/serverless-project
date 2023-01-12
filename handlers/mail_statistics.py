@@ -22,6 +22,6 @@ statistics_object = Statistic(
 
 
 def handler(event, context):
-    statistics_object.ses_send(settings.email_title)
+    statistics_object.send_statistics(settings.email_title)
 
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
