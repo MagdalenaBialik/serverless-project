@@ -1,13 +1,16 @@
 import boto3
-from moto import mock_ses
+import pytest
 
 from app.stream_class import Stream
 
 
-@mock_ses
-def test_get_pet_name_from_stream_event():
+@pytest.fixture()
+def stream_object():
     ses_client = boto3.client(service_name="ses")
-    stream_object = Stream(ses_service=ses_client)
+    return Stream(ses_service=ses_client)
+
+
+def test_get_pet_name_from_stream_event(stream_object):
     event = {
         "Records": [
             {
