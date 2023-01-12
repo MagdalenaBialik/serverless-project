@@ -23,6 +23,11 @@ def stream_object():
 
 
 @pytest.fixture()
+def ses_client():
+    return boto3.client(service_name="ses")
+
+
+@pytest.fixture()
 def test_event():
     return {
         "Records": [
@@ -52,8 +57,7 @@ def test_get_pet_name_from_stream_event(stream_object, test_event):
 
 
 @mock_ses
-def test_send_mail_from_stream(stream_object, test_event):
-    ses_client = boto3.client(service_name="ses")
+def test_send_mail_from_stream(ses_client, stream_object, test_event):
     ses_client.verify_email_identity(EmailAddress="magdalena.bialik@gmail.com")
 
     response = stream_object.send_mail_from_stream(title="Title", event=test_event)
