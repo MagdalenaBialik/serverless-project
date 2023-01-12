@@ -1,7 +1,19 @@
+import os
+
 import boto3
 import pytest
+from moto import mock_ses
 
 from app.stream_class import Stream
+
+
+@pytest.fixture(autouse=True)
+def aws_credentials():
+    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
+    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
+    os.environ["AWS_SECURITY_TOKEN"] = "testing"
+    os.environ["AWS_SESSION_TOKEN"] = "testing"
+    os.environ["AWS_DEFAULT_REGION"] = "eu-west-1"
 
 
 @pytest.fixture()
@@ -10,8 +22,9 @@ def stream_object():
     return Stream(ses_service=ses_client)
 
 
-def test_get_pet_name_from_stream_event(stream_object):
-    event = {
+@pytest.fixture()
+def test_event():
+    return {
         "Records": [
             {
                 "eventID": "d4bddbb8d65f8ac6fbe85a64a940b1f1",
@@ -31,5 +44,17 @@ def test_get_pet_name_from_stream_event(stream_object):
             }
         ]
     }
-    response = stream_object.get_pet_name_from_stream_event(event)
+
+
+def test_get_pet_name_from_stream_event(stream_object, test_event):
+    response = stream_object.get_pet_name_from_stream_event(test_event)
+    assert response == "Milusia"
+
+
+@mock_ses
+def test_send_mail_from_stream(stream_object, test_event):
+    ses_client = boto3.client(service_name="ses")
+    ses_client.verify_email_identity(EmailAddress="magdalena.bialik@gmail.com")
+
+    response = stream_object.send_mail_from_stream(title="Title", event=test_event)
     assert response == "Milusia"
