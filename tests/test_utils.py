@@ -1,7 +1,13 @@
-from app.utils import get_pet_name_from_stream_event
+import boto3
+from moto import mock_ses
+
+from app.stream_class import Stream
 
 
+@mock_ses
 def test_get_pet_name_from_stream_event():
+    ses_client = boto3.client(service_name="ses")
+    stream_object = Stream(ses_service=ses_client)
     event = {
         "Records": [
             {
@@ -22,5 +28,5 @@ def test_get_pet_name_from_stream_event():
             }
         ]
     }
-    response = get_pet_name_from_stream_event(event)
+    response = stream_object.get_pet_name_from_stream_event(event)
     assert response == "Milusia"
