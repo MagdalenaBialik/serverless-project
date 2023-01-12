@@ -5,8 +5,8 @@ import boto3
 from app.statistic_class import StatisticsSettings
 from app.stream_class import Stream
 
-s3 = boto3.client(service_name="s3", region_name="eu-west-1")
-stream = Stream(s3)
+ses_client = boto3.client(service_name="ses", region_name="eu-west-1")
+stream = Stream(ses_client)
 
 
 def handler(event, context):
