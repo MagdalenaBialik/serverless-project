@@ -3,10 +3,7 @@ class Stream:
         self.ses_service = ses_service
 
     def get_pet_name_from_stream_event(self, event):
-        image = event["Records"][0]["dynamodb"]["NewImage"]
-        name = image["PK"]["S"]
-
-        return name
+        return event["Records"][0]["dynamodb"]["NewImage"]["PK"]["S"]
 
     def ses_send(self, title: str, message):
         ses_response = self.ses_service.send_email(
@@ -19,7 +16,7 @@ class Stream:
         )
         return ses_response
 
-    def send_stream(self, title, event):
+    def send_mail_from_stream(self, title, event):
         message = self.get_pet_name_from_stream_event(event)
         self.ses_send(title, message)
 
