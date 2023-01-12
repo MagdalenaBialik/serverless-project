@@ -17,14 +17,13 @@ def aws_credentials():
 
 
 @pytest.fixture()
-def stream_object():
-    ses_client = boto3.client(service_name="ses")
-    return Stream(ses_service=ses_client)
+def ses_client():
+    return boto3.client(service_name="ses")
 
 
 @pytest.fixture()
-def ses_client():
-    return boto3.client(service_name="ses")
+def stream(ses_client):
+    return Stream(ses_service=ses_client)
 
 
 @pytest.fixture()
@@ -51,14 +50,14 @@ def test_event():
     }
 
 
-def test_get_pet_name_from_stream_event(stream_object, test_event):
-    response = stream_object.get_pet_name_from_stream_event(test_event)
+def test_get_pet_name_from_stream_event(stream, test_event):
+    response = stream.get_pet_name_from_stream_event(test_event)
     assert response == "Milusia"
 
 
 @mock_ses
-def test_send_mail_from_stream(ses_client, stream_object, test_event):
+def test_send_mail_from_stream(ses_client, stream, test_event):
     ses_client.verify_email_identity(EmailAddress="magdalena.bialik@gmail.com")
 
-    response = stream_object.send_mail_from_stream(title="Title", event=test_event)
+    response = stream.send_mail_from_stream(title="Title", event=test_event)
     assert response == "Milusia"
