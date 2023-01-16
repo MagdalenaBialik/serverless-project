@@ -1,16 +1,10 @@
 import operator
-from typing import List, Optional
+from typing import List
 
-from app.base import SharedSettings
+from app.base import StatisticsSettings
 from app.dynamodb_dao import DynamoDBDao
 from app.models import PetStatistics
 from app.s3_dao import S3BucketDAO
-
-
-class StatisticsSettings(SharedSettings):
-    s3_bucket_name: str
-    days: Optional[int]
-    email_title: str
 
 
 class Statistic:
