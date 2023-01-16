@@ -51,6 +51,7 @@ data "aws_iam_policy_document" "allow_access_to_s3_policy_document" {
     actions = [
       "s3:GetObject",
       "s3:ListObjects",
+      "s3:ListBucket",
     ]
 
     resources = ["arn:aws:s3:::${var.s3_bucket_name}/*", "arn:aws:s3:::${var.s3_bucket_name}"]
