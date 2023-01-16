@@ -2,7 +2,8 @@ import json
 
 import boto3
 
-from app.statistic_class import Statistic, StatisticsSettings
+from app.base import StatisticsSettings
+from app.statistic_class import Statistic
 
 settings = StatisticsSettings()
 
