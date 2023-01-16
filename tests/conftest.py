@@ -2,10 +2,11 @@ import os
 
 import boto3
 import pytest
-from moto import mock_dynamodb
+from moto import mock_dynamodb, mock_s3
 
 from app.base import SharedSettings
 from app.dynamodb_dao import DynamoDBDao
+from app.statistic_class import Statistic, StatisticsSettings
 from app.stream_class import Stream
 
 
@@ -90,3 +91,50 @@ def dynamodb_table(dynamodb_resource, shared_settings):
 @pytest.fixture(scope="session")
 def dynamodb_dao(shared_settings, dynamodb_table):
     return DynamoDBDao(settings=shared_settings, dynamodb_table=dynamodb_table)
+
+
+@pytest.fixture()
+def statistics_settings():
+    return StatisticsSettings(
+        dynamodb_table_name="test_table",
+        pets=["cat1", "dog1", "dog2", "cat2"],
+        s3_bucket_name="s3_test_bucket",
+        email_title="test_title",
+        days=None,
+    )
+
+
+@pytest.fixture()
+def s3_bucket():
+    with mock_s3():
+        yield boto3.client(service_name="s3", region_name="us-east-1")
+
+
+@pytest.fixture()
+def add_to_s3_bucket(s3_bucket, statistics_settings):
+    with mock_s3():
+
+        bucket = s3_bucket.create_bucket(Bucket=statistics_settings.s3_bucket_name)
+
+        FILE_NAME = "cat1.jpg"
+        FILE_LOCATION = "./cat1.jpg"
+
+        with open(FILE_LOCATION, "rb") as data:
+            s3_bucket.upload_fileobj(
+                data,
+                statistics_settings.s3_bucket_name,
+                FILE_NAME,
+                ExtraArgs={"ACL": "public-read"},
+            )
+
+        yield bucket
+
+
+@pytest.fixture()
+def statistics(dynamodb_table, s3_bucket, ses_client, statistics_settings):
+    return Statistic(
+        dynamodb_table=dynamodb_table,
+        s3_client=add_to_s3_bucket,
+        ses_service=ses_client,
+        settings=statistics_settings,
+    )
