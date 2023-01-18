@@ -15,3 +15,10 @@ class S3BucketDAO:
             Bucket=self.settings.s3_bucket_name, Prefix=prefix.pet_name
         )["Contents"]
         return random.choice([i["Key"] for i in list_of_s3_objects])
+
+    def generate_presigned_url(self, object_key):
+        return self.s3_client.generate_presigned_url(
+            "get_object",
+            Params={"Bucket": self.settings.s3_bucket_name, "Key": object_key},
+            ExpiresIn=3600,
+        )
