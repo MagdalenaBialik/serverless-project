@@ -26,7 +26,7 @@ class Statistic:
     def get_presigned_url(self, pet_statistics: List[PetStatistics]):
         max_pet_statistics = max(pet_statistics, key=operator.attrgetter("count"))
         object_key = self.s3_bucket_dao.choose_rand_object_from_s3_bucket(
-            max_pet_statistics
+            max_pet_statistics.pet_name
         )
         url = self.s3_bucket_dao.generate_presigned_url(object_key)
         return url

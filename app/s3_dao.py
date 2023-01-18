@@ -2,7 +2,6 @@ import random
 from typing import List
 
 from app.base import StatisticsSettings
-from app.models import PetStatistics
 
 
 class S3BucketDAO:
@@ -10,9 +9,9 @@ class S3BucketDAO:
         self.s3_client = s3_client
         self.settings = settings
 
-    def choose_rand_object_from_s3_bucket(self, prefix: PetStatistics) -> List[str]:
+    def choose_rand_object_from_s3_bucket(self, prefix: str) -> List[str]:
         list_of_s3_objects = self.s3_client.list_objects_v2(
-            Bucket=self.settings.s3_bucket_name, Prefix=prefix.pet_name
+            Bucket=self.settings.s3_bucket_name, Prefix=prefix
         )["Contents"]
         return random.choice([obj["Key"] for obj in list_of_s3_objects])
 
