@@ -7,6 +7,7 @@ resource "aws_lambda_function" "function" {
 
   handler = var.handler_name
   runtime = "python3.8"
+  timeout = 30
 
   environment {
     variables = merge({
