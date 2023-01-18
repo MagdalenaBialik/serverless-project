@@ -31,7 +31,6 @@ class Statistic:
             boto3.resource(service_name="dynamodb", region_name="eu-west-1").Table(
                 settings.dynamodb_table_name
             ),
-            settings,
             boto3.client(service_name="s3", region_name="eu-west-1"),
             boto3.client(service_name="ses", region_name="eu-west-1"),
             settings,
