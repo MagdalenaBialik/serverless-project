@@ -22,11 +22,15 @@ class Statistic:
         self.dynamodb_dao = DynamoDBDao(
             dynamodb_table=dynamodb_table, settings=settings
         )
+        self.s3_bucket_dao = S3BucketDAO(
+            s3_client=self.s3_client, settings=self.settings
+        )
 
     def get_presigned_url(self, pet_statistics: List[PetStatistics]):
         max_pet_statistics = max(pet_statistics, key=operator.attrgetter("count"))
-        s3_bucket_dao = S3BucketDAO(s3_client=self.s3_client, settings=self.settings)
-        object_key = s3_bucket_dao.choose_rand_object_from_s3_bucket(max_pet_statistics)
+        object_key = self.s3_bucket_dao.choose_rand_object_from_s3_bucket(
+            max_pet_statistics
+        )
 
         url = self.s3_client.generate_presigned_url(
             "get_object",
