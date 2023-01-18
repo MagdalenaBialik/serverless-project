@@ -28,12 +28,12 @@ class Statistic:
     @classmethod
     def create(cls, settings):
         return cls(
-            boto3.resource(service_name="dynamodb", region_name="eu-west-1").Table(
-                settings.dynamodb_table_name
-            ),
-            boto3.client(service_name="s3", region_name="eu-west-1"),
-            boto3.client(service_name="ses", region_name="eu-west-1"),
-            settings,
+            dynamodb_table=boto3.resource(
+                service_name="dynamodb", region_name="eu-west-1"
+            ).Table(settings.dynamodb_table_name),
+            s3_client=boto3.client(service_name="s3", region_name="eu-west-1"),
+            ses_service=boto3.client(service_name="ses", region_name="eu-west-1"),
+            settings=settings,
         )
 
     def get_presigned_url(self, pet_statistics: List[PetStatistics]):
