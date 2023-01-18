@@ -1,15 +1,10 @@
 import operator
-from typing import List, Optional
+from typing import List
 
-from app.base import SharedSettings
+from app.base import StatisticsSettings
 from app.dynamodb_dao import DynamoDBDao
 from app.models import PetStatistics
-
-
-class StatisticsSettings(SharedSettings):
-    s3_bucket_name: str
-    days: Optional[int]
-    email_title: str
+from app.s3_dao import S3BucketDAO
 
 
 class Statistic:
@@ -20,24 +15,20 @@ class Statistic:
         ses_service,
         settings: StatisticsSettings,
     ):
-        self.s3_client = s3_client
         self.ses_service = ses_service
         self.settings = settings
 
         self.dynamodb_dao = DynamoDBDao(
             dynamodb_table=dynamodb_table, settings=settings
         )
+        self.s3_bucket_dao = S3BucketDAO(s3_client=s3_client, settings=self.settings)
 
     def get_presigned_url(self, pet_statistics: List[PetStatistics]):
         max_pet_statistics = max(pet_statistics, key=operator.attrgetter("count"))
-
-        object_key = f"{max_pet_statistics.pet_name}.jpg"
-
-        url = self.s3_client.generate_presigned_url(
-            "get_object",
-            Params={"Bucket": self.settings.s3_bucket_name, "Key": object_key},
-            ExpiresIn=3600,
+        object_key = self.s3_bucket_dao.choose_rand_object_from_s3_bucket(
+            max_pet_statistics.pet_name
         )
+        url = self.s3_bucket_dao.generate_presigned_url(object_key)
         return url
 
     def prepare_statistics_message(self, pet_statistics: List[PetStatistics]):
