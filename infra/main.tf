@@ -109,7 +109,7 @@ module "event_bridge_weekly_statistics" {
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda_statistics_weekly.lambda_function_arn
   function_name       = module.lambda_statistics_weekly.lambda_function_name
-  cron_expression     = "cron(1 * * * ? *)"
+  cron_expression     = "cron(0/1 * * * ? *)"
 }
 
 module "event_bridge_monthly_statistics" {
