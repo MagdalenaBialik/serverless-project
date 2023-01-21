@@ -8,5 +8,6 @@ def handler(event, context):
     settings = StatisticsSettings()
     statistics_object = Statistic.create(settings)
     statistics_object.send_statistics(settings.email_title)
+    print(event)
 
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
