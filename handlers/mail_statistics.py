@@ -5,6 +5,7 @@ from app.statistic_class import Statistic
 
 
 def handler(event, context):
+    print(event)
     settings = StatisticsSettings()
     statistics_object = Statistic.create(settings)
     statistics_object.send_statistics(settings.email_title)
