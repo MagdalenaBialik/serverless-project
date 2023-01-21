@@ -2,6 +2,7 @@ import random as rand
 import time
 from typing import List, Optional
 
+import boto3
 from boto3.dynamodb.conditions import Key
 
 from app.base import SharedSettings
@@ -12,6 +13,15 @@ class DynamoDBDao:
     def __init__(self, dynamodb_table, settings: SharedSettings):
         self.settings = settings
         self.dynamodb_table = dynamodb_table
+
+    @classmethod
+    def create(cls, settings):
+        return cls(
+            boto3.resource(service_name="dynamodb", region_name="eu-west-1").Table(
+                settings.dynamodb_table_name
+            ),
+            settings,
+        )
 
     def add_pet(self, pet_name: str):
         self.dynamodb_table.put_item(

@@ -1,6 +1,8 @@
 import operator
 from typing import List
 
+import boto3
+
 from app.base import StatisticsSettings
 from app.dynamodb_dao import DynamoDBDao
 from app.models import PetStatistics
@@ -22,6 +24,17 @@ class Statistic:
             dynamodb_table=dynamodb_table, settings=settings
         )
         self.s3_bucket_dao = S3BucketDAO(s3_client=s3_client, settings=self.settings)
+
+    @classmethod
+    def create(cls, settings):
+        return cls(
+            dynamodb_table=boto3.resource(
+                service_name="dynamodb", region_name="eu-west-1"
+            ).Table(settings.dynamodb_table_name),
+            s3_client=boto3.client(service_name="s3", region_name="eu-west-1"),
+            ses_service=boto3.client(service_name="ses", region_name="eu-west-1"),
+            settings=settings,
+        )
 
     def get_presigned_url(self, pet_statistics: List[PetStatistics]):
         max_pet_statistics = max(pet_statistics, key=operator.attrgetter("count"))

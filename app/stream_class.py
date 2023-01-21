@@ -1,6 +1,13 @@
+import boto3
+
+
 class Stream:
     def __init__(self, ses_service):
         self.ses_service = ses_service
+
+    @classmethod
+    def create(cls):
+        return cls(boto3.client(service_name="ses", region_name="eu-west-1"))
 
     def get_pet_name_from_stream_event(self, event: dict):
         return event["Records"][0]["dynamodb"]["NewImage"]["PK"]["S"]
