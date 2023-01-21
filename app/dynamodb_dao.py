@@ -1,5 +1,6 @@
 import random as rand
 import time
+import timeit
 from typing import List, Optional
 
 import boto3
@@ -7,6 +8,18 @@ from boto3.dynamodb.conditions import Key
 
 from app.base import SharedSettings
 from app.models import PetStatistics
+
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        t0 = timeit.default_timer()
+        response = func(*args, **kwargs)
+        t1 = timeit.default_timer()
+        elapsed_time = t1 - t0
+        print(f"elapsed time: {elapsed_time} for {func}")
+        return response
+
+    return wrapper
 
 
 class DynamoDBDao:
@@ -51,6 +64,7 @@ class DynamoDBDao:
         )
         return PetStatistics(pet_name=pet_name, count=response["Count"])
 
+    @timer
     def get_all_pet_event(self, days: Optional[int]) -> List[PetStatistics]:
         pet_events = [
             self.get_all_pet_events_by_name(pet, days) for pet in self.settings.pets

@@ -1,4 +1,5 @@
 import operator
+import timeit
 from typing import List
 
 import boto3
@@ -7,6 +8,18 @@ from app.base import StatisticsSettings
 from app.dynamodb_dao import DynamoDBDao
 from app.models import PetStatistics
 from app.s3_dao import S3BucketDAO
+
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        t0 = timeit.default_timer()
+        response = func(*args, **kwargs)
+        t1 = timeit.default_timer()
+        elapsed_time = t1 - t0
+        print(f"elapsed time: {elapsed_time} for {func}")
+        return response
+
+    return wrapper
 
 
 class Statistic:
@@ -44,6 +57,7 @@ class Statistic:
         url = self.s3_bucket_dao.generate_presigned_url(object_key)
         return url
 
+    @timer
     def prepare_statistics_message(self, pet_statistics: List[PetStatistics]):
         message = "Pet Statistics: \n"
         for item in pet_statistics:
@@ -53,6 +67,7 @@ class Statistic:
 
         return message
 
+    @timer
     def send_statistics(self, title: str):
         pet_events = self.dynamodb_dao.get_all_pet_event(days=self.settings.days)
         message = self.prepare_statistics_message(pet_events)
@@ -60,6 +75,7 @@ class Statistic:
         self.ses_send(title, message)
         return message
 
+    @timer
     def ses_send(self, title: str, message):
         ses_response = self.ses_service.send_email(
             Source="magdalena.bialik@gmail.com",
