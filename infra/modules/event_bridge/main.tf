@@ -4,8 +4,9 @@ resource "aws_cloudwatch_event_rule" "lambda_event_rule" {
 }
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
-  arn  = var.lambda_function_arn
-  rule = aws_cloudwatch_event_rule.lambda_event_rule.name
+  arn   = var.lambda_function_arn
+  rule  = aws_cloudwatch_event_rule.lambda_event_rule.name
+  input = jsonencode(var.lambda_input)
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_invoke_lambda" {

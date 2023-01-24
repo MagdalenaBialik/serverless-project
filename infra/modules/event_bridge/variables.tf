@@ -9,3 +9,8 @@ variable "function_name" {
 variable "cron_expression" {
   type = string
 }
+
+variable "lambda_input" {
+  type    = map(any)
+  default = {}
+}
