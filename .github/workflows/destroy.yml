@@ -28,4 +28,3 @@ jobs:
         uses: dflook/terraform-destroy@v1
         with:
           path: ./infra
-          workspace: serverless-project
