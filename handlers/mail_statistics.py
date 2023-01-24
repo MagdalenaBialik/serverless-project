@@ -10,6 +10,8 @@ def handler(event, context):
     print(event["email_title"])
     settings = SharedSettings()
     statistics_object = Statistic.create(settings)
-    statistics_object.send_statistics(days=event["days"], title=event["email_title"])
+    statistics_object.send_statistics(
+        days=int(event["days"]), title=event["email_title"]
+    )
 
     return {"statusCode": 200, "body": json.dumps("Hello from lambda")}
