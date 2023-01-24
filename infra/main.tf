@@ -109,7 +109,7 @@ module "event_bridge_weekly_statistics" {
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda_statistics.lambda_function_arn
   function_name       = module.lambda_statistics.lambda_function_name
-  cron_expression     = "cron(0/5 * * * ? *)"
+  cron_expression     = "cron(0/15 * * * ? *)"
   lambda_input        = { days : 7, email_title = "Pet of the days weekly statistics" }
 }
 
