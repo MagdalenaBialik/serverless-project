@@ -9,7 +9,5 @@ class SharedSettings(BaseSettings):
     s3_bucket_name: str
 
 
-# class StatisticsSettings(SharedSettings):
-#
-#     days: Optional[int]
-#     email_title: str
+class StreamSettings(SharedSettings):
+    email_title: str
