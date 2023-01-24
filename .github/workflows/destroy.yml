@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  destroy_workspace:
+  destroy_infrastructure:
     runs-on: ubuntu-latest
     defaults:
       run:
