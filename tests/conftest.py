@@ -29,7 +29,7 @@ def stream(ses_client):
 
 
 @pytest.fixture()
-def test_event():
+def test_event_stream():
     return {
         "Records": [
             {
@@ -57,6 +57,7 @@ def shared_settings():
     return SharedSettings(
         dynamodb_table_name="test_table",
         pets=["cat1", "dog1", "dog2", "cat2"],
+        s3_bucket_name="test_bucket",
     )
 
 
