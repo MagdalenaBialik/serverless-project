@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -7,7 +9,7 @@ class PetStatistics(BaseModel):
 
 
 class EventBridgeEvent(BaseModel):
-    days: int
+    days: Optional[int]
     email_title: str
 
 
