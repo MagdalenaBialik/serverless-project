@@ -83,6 +83,7 @@ module "lambda_statistics" {
 
 
 module "event_bridge_add_pet" {
+  event_name          = "pets_app_add_pet"
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda_add_pet.lambda_function_arn
   function_name       = module.lambda_add_pet.lambda_function_name
@@ -90,6 +91,7 @@ module "event_bridge_add_pet" {
 }
 
 module "event_bridge_weekly_statistics" {
+  event_name          = "pets_app_weekly_stat"
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda_statistics.lambda_function_arn
   function_name       = module.lambda_statistics.lambda_function_name
@@ -98,6 +100,7 @@ module "event_bridge_weekly_statistics" {
 }
 
 module "event_bridge_monthly_statistics" {
+  event_name          = "pets_app_overall_stat"
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda_statistics.lambda_function_arn
   function_name       = module.lambda_statistics.lambda_function_name

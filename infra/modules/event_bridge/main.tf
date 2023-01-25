@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_event_rule" "lambda_event_rule" {
-  name                = var.function_name
+  name                = var.event_name
   schedule_expression = var.cron_expression
 }
 

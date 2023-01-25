@@ -14,3 +14,7 @@ variable "lambda_input" {
   type    = map(any)
   default = {}
 }
+
+variable "event_name" {
+  type = string
+}
