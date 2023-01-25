@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class PetStatistics(BaseModel):
@@ -11,6 +11,13 @@ class PetStatistics(BaseModel):
 class EventBridgeEvent(BaseModel):
     days: Optional[int]
     email_title: str
+
+    @validator("days", pre=True)
+    def allow_none(cls, v):
+        if v is None:
+            return None
+        else:
+            return v
 
 
 # dict = {'days': '7', 'email_title': 'Pet of the days weekly statistics'}
