@@ -18,8 +18,3 @@ class EventBridgeEvent(BaseModel):
             return None
         else:
             return v
-
-
-# dict = {'days': '7', 'email_title': 'Pet of the days weekly statistics'}
-# object = EventBridgeEvent.parse_obj(dict)
-# print(object.days)

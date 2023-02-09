@@ -28,7 +28,7 @@ module "iam" {
   app_name            = var.app_name
   dynamodb_table_name = module.dynamodb.dynamodb_table_name
   s3_bucket_name      = module.photo-s3bucket.s3_bucket_name
-  //  ses_identity        = module.ses.ses_identity_arn
+
 }
 
 module "lambda_add_pet" {
@@ -104,7 +104,7 @@ module "event_bridge_monthly_statistics" {
   source              = "./modules/event_bridge"
   lambda_function_arn = module.lambda_statistics.lambda_function_arn
   function_name       = module.lambda_statistics.lambda_function_name
-  cron_expression     = "cron(0/5 * * * ? *)"
+  cron_expression     = "cron(0 8 1 * ? *)"
   lambda_input        = { days : null, email_title = "Pet of the days overall statistics" }
 }
 
@@ -112,7 +112,3 @@ module "photo-s3bucket" {
   source   = "./modules/s3"
   app_name = var.app_name
 }
-
-//module "ses" {
-//  source = "./modules/ses"
-//}
