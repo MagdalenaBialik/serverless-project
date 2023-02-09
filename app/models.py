@@ -14,6 +14,7 @@ class EventBridgeEvent(BaseModel):
 
     @validator("days", pre=True)
     def allow_none(cls, v):
+        # TODO: check if this is necessary
         if v is None:
             return None
         else:
