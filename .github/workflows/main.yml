@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: 3.8
       - name: install pre-commit
-        run: pip3 install pre-commit --use-deprecated=legacy-resolver
+        run: pip3 install pre-commit
       - name: run pre-commit
         run: pre-commit run --all-files
 
