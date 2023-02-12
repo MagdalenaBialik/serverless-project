@@ -1,11 +1,11 @@
 import random
 from typing import List
 
-from app.base import StatisticsSettings
+from app.base import SharedSettings
 
 
 class S3BucketDAO:
-    def __init__(self, s3_client, settings: StatisticsSettings):
+    def __init__(self, s3_client, settings: SharedSettings):
         self.s3_client = s3_client
         self.settings = settings
 

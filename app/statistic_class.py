@@ -1,9 +1,9 @@
 import operator
-from typing import List
+from typing import List, Optional
 
 import boto3
 
-from app.base import StatisticsSettings
+from app.base import SharedSettings
 from app.dynamodb_dao import DynamoDBDao
 from app.models import PetStatistics
 from app.s3_dao import S3BucketDAO
@@ -15,7 +15,7 @@ class Statistic:
         dynamodb_table,
         s3_client,
         ses_service,
-        settings: StatisticsSettings,
+        settings: SharedSettings,
     ):
         self.ses_service = ses_service
         self.settings = settings
@@ -53,8 +53,8 @@ class Statistic:
 
         return message
 
-    def send_statistics(self, title: str):
-        pet_events = self.dynamodb_dao.get_all_pet_event(days=self.settings.days)
+    def send_statistics(self, days: Optional[int], title: str):
+        pet_events = self.dynamodb_dao.get_all_pet_event(days)
         message = self.prepare_statistics_message(pet_events)
 
         self.ses_send(title, message)
